@@ -9,6 +9,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Component
 public class WeatherService {
@@ -28,7 +29,6 @@ public class WeatherService {
                 .build();
 
         Request request = new Request.Builder()
-                //.url("https://community-open-weather-map.p.rapidapi.com/weather?callback=test&id=2172797&units=%2522metric%2522%20or%20%2522imperial%2522&mode=xml%252C%20html&q=New%20York")
                 .url(url)
                 .get()
                 .addHeader("x-rapidapi-host", "community-open-weather-map.p.rapidapi.com")
@@ -36,15 +36,13 @@ public class WeatherService {
                 .build();
 
         Response response = client.newCall(request).execute();
-        System.out.println();
 
-        String body = response.body().string();
+        String body = Objects.requireNonNull(response.body()).string();
         String result = body.substring(body.indexOf("(") + 1, body.lastIndexOf(")"));
 
         ObjectMapper mapper = new ObjectMapper();
         Weather weather = mapper.readValue(result, Weather.class);
 
-        System.out.println(weather.getMain().getTemp());
         return weather;
     }
 
