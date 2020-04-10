@@ -6,7 +6,12 @@
 </head>
 <body>
 <h1>Result</h1>
-<p th:text="'temp: ' + ${temp}" />
+<p th:text="'temp: ' + ${weather.getMain().getTemp()}" />
+<p th:text="'max temp: ' + ${weather.getMain().getTemp_max()}" />
+<p th:text="'min temp: ' + ${weather.getMain().getTemp_min()}" />
+<p th:text="'feels like: ' + ${weather.getMain().getFeels_like()}" />
+<p th:text="'wind speed: ' + ${weather.getWind().getSpeed()}" />
+<p th:text="'clouds: ' + ${weather.getClouds().getAll()}" />
 <a href="/greeting">Submit another message</a>
 </body>
 </html>

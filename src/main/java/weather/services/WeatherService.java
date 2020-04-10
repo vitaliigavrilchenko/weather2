@@ -21,10 +21,6 @@ public class WeatherService {
                 .scheme("https")
                 .host("community-open-weather-map.p.rapidapi.com")
                 .addPathSegment("weather")
-                .addQueryParameter("callback", "test")
-                .addQueryParameter("id", "2172797")
-                .addQueryParameter("units", "%22metric%22 or %22imperial%22")
-                .addQueryParameter("mode", "xml%2C html")
                 .addQueryParameter("q", city)
                 .build();
 
@@ -37,20 +33,10 @@ public class WeatherService {
 
         Response response = client.newCall(request).execute();
 
-        String body = Objects.requireNonNull(response.body()).string();
-        String result = body.substring(body.indexOf("(") + 1, body.lastIndexOf(")"));
-
         ObjectMapper mapper = new ObjectMapper();
-        Weather weather = mapper.readValue(result, Weather.class);
+        Weather weather = mapper.readValue(Objects.requireNonNull(response.body()).string(), Weather.class);
 
         return weather;
-    }
-
-    public String getTemp(String city) throws IOException {
-        int tempInKelvin = (int) Math.round(getWeather(city).getMain().getTemp());
-        //int tempInKelvin = 288;
-        int tempInCelsius = tempInKelvin - 273;
-        return Integer.toString(tempInCelsius);
     }
 
 }
